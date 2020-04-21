@@ -37,6 +37,7 @@ memes_schema = MemeSchema(many=True)
 def greeting():
     return "<h1>Meme Maker API</h1>"
 
+#POST
 @app.route("/add-meme", methods=["POST"])
 def add_meme():
     text = request.json["text"]
@@ -48,7 +49,49 @@ def add_meme():
     db.session.add(new_meme)
     db.session.commit()
 
-    return jsonify("MEME POSTED")
+    meme = Meme.query.get(new_meme.id)
+    return meme_schema.jsonify(meme)
+
+#GET
+@app.route("/memes", methods=["GET"])
+def get_memes():
+    all_memes = Meme.query.all()
+    result = memes_schema.dump(all_memes)
+
+    return jsonify(result)
+
+#GET by ID
+@app.route("/meme/<id>", methods=["GET"])
+def get_meme(id):
+    meme = Meme.query.get(id)
+    
+    return meme_schema.jsonify(meme)
+
+#PUT
+@app.route("/meme/<id>", methods=["PUT"])
+def update_meme(id):
+    meme = Meme.query.get(id)
+
+    new_text = request.json["text"]
+    new_favorite = request.json["favorite"]
+
+    meme.text = new_text
+    meme.favorite = new_favorite
+
+    db.session.commit()
+    return meme_schema.jsonify(meme)
+
+#DELETE
+@app.route("/delete-meme(id)", methods=["DELETE"])
+def delete_meme(id):
+    meme = Meme.query.get(id)
+
+    db.session.delete(meme)
+    db.session.commit()
+
+    return jsonify("DELETED!")
+
+
 
 if __name__ == "__main__":
     app.run(debug = True)
