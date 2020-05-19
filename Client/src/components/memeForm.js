@@ -70,6 +70,7 @@ export default function MemeForm(props) {
                 setImage("")
                 setFavorite(false)
                 imageRef.current.dropzone.removeAllFiles()
+                console.log("Reset")
             })
             .then(() => navigate("/"))
             .catch((err) => console.log( "Put Err: ", err))
