@@ -11,7 +11,10 @@ export default function MemeForm(props) {
     const [caption, setCaption] = useState("")
     const [favorite, setFavorite] = useState(false)
     const [image, setImage] = useState("")
-    const imageRef = useRef(null)
+
+    const empty = null
+
+    const imageRef = useRef(empty)
 
     const componentConfig = () => {
         return{
